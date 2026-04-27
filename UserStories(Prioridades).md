@@ -1,5 +1,3 @@
-content = """# Histórias de Usuário - Prioridade Alta
-
 Este documento contém as Histórias de Usuário (User Stories) classificadas com prioridade **Alta** para o desenvolvimento do MVP do App de Gestão de Treinos.
 
 ---
