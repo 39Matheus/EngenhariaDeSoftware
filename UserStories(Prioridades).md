@@ -37,6 +37,3 @@ Como usuário, eu quero adicionar múltiplos exercícios a um treino previamente
 * Dentro de um treino, deve haver um botão de "Adicionar Exercício".
 * O usuário deve poder digitar o nome do exercício e salvá-lo na lista daquele treino.
 """
-
-with open("user_stories_prioridade_alta.md", "w", encoding="utf-8") as f:
-    f.write(content)
