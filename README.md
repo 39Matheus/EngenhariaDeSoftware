@@ -19,7 +19,7 @@ Clara Alves Pinheiro
 Matheus Bezeril Pinto  
 
 ### Descrição
-Desenvolvido em Flutter (Dart), o MVP do aplicativo centraliza em uma única tela a criação e o agendamento de treinos diários ou semanais. 
+Desenvolvido em Django, Next.js, React, Python, Javascript, HTML, CSS, React, o MVP do aplicativo centraliza em uma única tela a criação e o agendamento de treinos diários ou semanais. 
 O usuário pode cadastrar exercícios com séries e repetições e utilizar checkboxes para acompanhar a execução, 
 gerando automaticamente a porcentagem de conclusão do treino e um histórico dos dias realizados.
 
