@@ -25,7 +25,7 @@
 * __PATCH__: atualiza um campo do exercício.
 * __DELETE__: deleta o exercício.
 
-### /api/v1/rotinasexercicios/fk (nci(nci(rotina)
+### /api/v1/rotinasexercicios/fk (rotina)
 * __GET__: retorna todas os exercícios, sua ordem e seu número de séries relacionados á rotina.
 * __PATCH__: atualiza um campo.
 * __DELETE__: deleta a tupla relacionada.
