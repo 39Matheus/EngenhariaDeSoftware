@@ -49,11 +49,6 @@ class RotinaDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RotinaSerializer
 
 
-class RotinaExercicioList(generics.ListCreateAPIView):
-    queryset = RotinaExercicio.objects.all()  # type: ignore
-    serializer_class = RotinaExercicioSerializer
-
-
 class RotinaExercicioDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = RotinaExercicio.objects.all()  # type: ignore
     serializer_class = RotinaExercicioSerializer
