@@ -11,7 +11,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ["id", "username", "email", "first_name", "last_name"]
-        # Se você for criar usuários por essa API, é importante ocultar a senha na resposta
         extra_kwargs = {"password": {"write_only": True}}
 
 
@@ -29,13 +28,13 @@ class RotinaExercicioSerializer(serializers.ModelSerializer):
         model = RotinaExercicio
         fields = [
             "id",
-            "rotina",
             "exercicio",
             "exercicio_detalhe",
             "serie",
             "repeticoes",
             "ordem",
         ]
+        read_only_fields = ["rotina",]
 
 
 class RotinaSerializer(serializers.ModelSerializer):
