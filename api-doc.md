@@ -24,6 +24,9 @@
 * __GET__: retorna todos os usuários.
 * __POST__: cria um usuário.
 
+### /api/v1/login/
+* __POST__: envia as credenciais para o login.
+
 ### /api/v1/pk/
 * __GET__: retorna o usuário com o id especificado.
 * __PATCH__: atualiza um campo do usuário.

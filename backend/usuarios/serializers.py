@@ -10,8 +10,19 @@ Usuario = get_user_model()
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ["id", "username", "email", "first_name", "last_name"]
+        fields = ["id", "username", "email", "first_name", "password"]
         extra_kwargs = {"password": {"write_only": True}}
+
+    def create(self, validated_data):
+        # Em vez de salvar direto, usamos o set_password para gerar o hash
+        usuario = Usuario(
+            username=validated_data["username"],
+            email=validated_data.get("email", ""),
+            first_name=validated_data.get("first_name", ""),
+        )
+        usuario.set_password(validated_data["password"])
+        usuario.save()
+        return usuario
 
 
 class ExercicioSerializer(serializers.ModelSerializer):
@@ -34,7 +45,9 @@ class RotinaExercicioSerializer(serializers.ModelSerializer):
             "repeticoes",
             "ordem",
         ]
-        read_only_fields = ["rotina",]
+        read_only_fields = [
+            "rotina",
+        ]
 
 
 class RotinaSerializer(serializers.ModelSerializer):
