@@ -1,4 +1,3 @@
-
 ## Índice
 
 - [Descrição](#descrição)
@@ -8,21 +7,21 @@
 - [Estrutura do Projeto](#estrutura-do-projeto)  
 - [Licença](#licença)  
 
-## Descrição
 ## Sobre o Projeto
 
-Descrição do seu projeto.
 ### Título
-Título do Projeto
-
-## Componentes
-### Descrição
-Descrição do seu projeto.
+***Exercitar***
 
 ### Componentes
-- Aluno(a) 1
-- Aluno(a) 2
-- Aluno(a) 3
+Bárbara Lima Cordeiro da Silva  
+Clara Alves Pinheiro  
+Ênio Antônio Cunha Lizieri do Nascimento  
+Matheus Bezeril Pinto  
+
+### Descrição
+Desenvolvido em Flutter (Dart), o MVP do aplicativo centraliza em uma única tela a criação e o agendamento de treinos diários ou semanais. 
+O usuário pode cadastrar exercícios com séries e repetições e utilizar checkboxes para acompanhar a execução, 
+gerando automaticamente a porcentagem de conclusão do treino e um histórico dos dias realizados.
 
 ## Como clonar ou baixar
 
