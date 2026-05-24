@@ -1,5 +1,5 @@
 ﻿Nome,tag,prioridade
-"US00: Login ",Não iniciada,alta
+"US00: Login ",iniciada,alta
 "US01: Cadastro de Novo Treino  ",Não iniciada,alta
 "US02: Agendamento Semanal (Recorrente) ",Não iniciada,media
 US03: Agendamento Diário (Avulso),Não iniciada,media
