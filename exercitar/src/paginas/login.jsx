@@ -1,85 +1,197 @@
-import { TextField, Button, Box, Typography } from '@mui/material';
-import Forms from '../components/forms';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  CssBaseline,
+  Paper,
+} from "@mui/material";
 
+import Forms from "../components/forms";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
-  //capturar dados do formulário
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
 
+  // Estados
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
 
-
+  // Função de login
   const handleLogin = async (e) => {
-    e.preventDefault(); // Impede a página de recarregar
+    e.preventDefault();
+
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // Enviando os dados que você capturou nos inputs
-        body: JSON.stringify({ 
-          username: email, // O Django por padrão usa 'username', se seu backend aceitar email mude aqui
-          password: senha 
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:8000/api/v1/login/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            username: email,
+            password: senha,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
-        
-        // Salvamos os dados para usar nas telas de treinos depois
+
         localStorage.setItem("token", data.token);
         localStorage.setItem("usuario_id", data.user_id);
 
-        // Se deu tudo certo, joga o usuário para a Home!
         navigate("/home");
       } else {
         alert("E-mail ou senha incorretos.");
       }
     } catch (error) {
-      console.error("Erro ao conectar com o servidor:", error);
-      alert("Não foi possível conectar ao servidor backend.");
+      console.error(error);
+      alert("Erro ao conectar com o backend.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Forms title="Entrar na sua Conta">
-      {/*formulario que ira como children no formd.jsx */}
-      <Box component="form" onSubmit={handleLogin} sx={{ display: 'flex', flexDirection: 'column', gap: 2,width: '80%',alignItems: 'center', margin: '0 auto' }}>
-        <TextField 
-          label="E-mail" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          fullWidth
-          required
-        />
-        <TextField 
-          label="Senha" 
-          value={senha} 
-          onChange={(e) => setSenha(e.target.value)} 
-          variant="outlined" 
-          fullWidth
-          type="password" 
-          required
-        />
-        
-        <Button type= "submit" variant="contained" color="primary" fullWidth size="large" disabled={loading} sx={{ mt: 1 }}>
-          {loading ? "Entrando..." : "Entrar"}
-        </Button>
+    <>
+      <CssBaseline />
 
-        <Typography variant="body2" align="center" sx={{ mt: 1 }}>
-          Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
-        </Typography>
-        <Typography variant="contained" align="center" sx={{ mt: 1 }}>
-          Não tem uma conta? <Link to="/home">Voltar para a página inicial</Link>
-        </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          height: "100vh",
+          width: "100%",
+        }}
+      >
+        {/* LADO DO LOGIN */}
+        <Box
+          sx={{
+            width: {
+              xs: "100%",
+              md: "50%",
+            },
+
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+
+            bgcolor: "#121212",
+
+            p: 3,
+          }}
+        >
+          <Paper
+            elevation={8}
+            sx={{
+              width: "100%",
+              maxWidth: 450,
+
+              p: 5,
+
+              borderRadius: 4,
+            }}
+          >
+            <Typography
+              variant="h4"
+              align="center"
+              fontWeight="bold"
+              mb={4}
+            >
+              Entrar
+            </Typography>
+
+            <Box
+              component="form"
+              onSubmit={handleLogin}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+              }}
+            >
+              <TextField
+                label="E-mail"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                required
+              />
+
+              <TextField
+                label="Senha"
+                type="password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                fullWidth
+                required
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                disabled={loading}
+                sx={{
+                  mt: 2,
+                  py: 1.5,
+                  fontWeight: "bold",
+                }}
+              >
+                {loading ? "Entrando..." : "Entrar"}
+              </Button>
+
+              <Typography
+                variant="body2"
+                align="center"
+                sx={{ mt: 2 }}
+              >
+                Não tem uma conta?{" "}
+                <Link to="/cadastro">
+                  Cadastre-se
+                </Link>
+              </Typography>
+
+              <Typography
+                variant="body2"
+                align="center"
+              >
+                <Link to="/home">
+                  Voltar para a página inicial
+                </Link>
+              </Typography>
+            </Box>
+          </Paper>
+        </Box>
+        {/* LADO DA IMAGEM */}
+        <Box
+          sx={{
+            width: "50%",
+            backgroundImage: `
+              linear-gradient(
+                rgba(0,0,0,0.5),
+                rgba(0,0,0,0.5)
+              ),
+              url('https://blog.nextfit.com.br/wp-content/uploads/2021/07/x-passos-essenciais-na-hora-de-montar-uma-academia-4-20210630151949.jpg.jpg')
+            `,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+
+            display: {
+              xs: "none",
+              md: "block",
+            },
+          }}
+        />
       </Box>
-    </Forms>
+    </>
   );
 }
