@@ -18,7 +18,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api-token-auth/", {
+      const response = await fetch("http://localhost:8000/api/v1/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // Enviando os dados que você capturou nos inputs
