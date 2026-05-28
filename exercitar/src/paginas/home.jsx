@@ -10,16 +10,45 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 
 import AppBarComponent from '../components/AppBar';
+import DialogCatalog from '../components/DialogCatalog';
+
 
 export default function Home() {
   const navigate = useNavigate();
 
+  const [openCatalog, setOpenCatalog] = React.useState(false);
+
   // Exemplo de dados que vão vir do seu banco do Django no futuro
-  const meusCards = [
-    { id: 1, titulo: "Treino de Quadríceps", descricao: "Agachamento, Leg Press, Extensora e Afundo." },
-    { id: 2, titulo: "Cardio do Dia", descricao: "30 minutos de corrida leve na esteira." },
-    { id: 3, titulo: "Beber Água", descricao: "Meta diária de 3L batida com sucesso." },
-  ];
+  const [meusCards, setMeusCards] = React.useState([
+    {
+      id: 1,
+      titulo: "Treino de Quadríceps",
+      descricao: "Agachamento, Leg Press, Extensora e Afundo."
+    },
+    {
+      id: 2,
+      titulo: "Treino de Peito",
+      descricao: "Supino reto, Supino inclinado, Crossover e Flexões."
+    }
+  ]);
+
+  const handleCreateWorkout = (workoutData) => {
+
+    const novoCard = {
+      id: Date.now(),
+      titulo: workoutData.nome,
+      descricao: workoutData.exercicios
+        .map((ex) => ex.nome)
+        .join(", ")
+    };
+
+    setMeusCards((prev) => [
+      ...prev,
+      novoCard
+    ]);
+
+    setOpenCatalog(false);
+  };
 
   const handleEditar = (id) => {
     console.log("Editar o card:", id);
@@ -32,14 +61,15 @@ export default function Home() {
   };
 
   const handleAdicionar = () => {
-    console.log("Clicou em adicionar!");
-    // Aqui você abre o formulário de criação
+  setOpenCatalog(true);
+  };
+  const handleCloseCatalog = () => {
+  setOpenCatalog(false);
   };
 
   return (
     <>
       <AppBarComponent />
-
       {/* Container principal com espaçamento seguro */}
       <Box sx={{ padding: { xs: '2px', md: '4px' }, position: 'relative', minHeight: '80vh' }}>
         
@@ -98,9 +128,9 @@ export default function Home() {
           >
             Sair do Sistema
           </Button>
-        </Box>
+        </Box>      
 
-        {/* BOTÃO FLUTUANTE DE ADICIONAR NA LATERAL DIREITA */}
+        {/* BOTÃO FLUTUANTE DE ADICIONAR NA LATERAL DIREITA*/} 
         <Fab 
           color="primary" 
           aria-label="add" 
@@ -116,6 +146,7 @@ export default function Home() {
         </Fab>
 
       </Box>
+      <DialogCatalog open={openCatalog} onClose={handleCloseCatalog}  onCreateWorkout={handleCreateWorkout} />
     </>
   );
 }

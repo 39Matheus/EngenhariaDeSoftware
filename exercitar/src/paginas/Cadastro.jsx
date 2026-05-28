@@ -59,66 +59,76 @@ export default function Cadastro() {
   };
 
   return (
-    <Forms title="Criar Nova Conta">
-      {/* Vinculando a função de envio ao formulário */}
-      <Box 
-        component="form" 
-        onSubmit={handleCadastro}
-        sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '80%', alignItems: 'center', margin: '0 auto' }}
-      >
-        <TextField 
-          label="Nome Completo" 
-          variant="outlined" 
-          fullWidth 
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          required
-        />
-        <TextField 
-          label="E-mail" 
-          variant="outlined" 
-          fullWidth 
-          type="email" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField 
-          label="Senha" 
-          variant="outlined" 
-          fullWidth 
-          type="password" 
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          required
-        />
-        <TextField 
-          label="Confirmar Senha" 
-          variant="outlined" 
-          fullWidth 
-          type="password" 
-          value={confirmarSenha}
-          onChange={(e) => setConfirmarSenha(e.target.value)}
-          required
-        />
-        
-        {/* Adicionado o type="submit" e o travamento por loading */}
-        <Button 
-          type="submit" 
-          variant="contained" 
-          color="primary" 
-          fullWidth 
-          size="large" 
-          disabled={loading}
-          sx={{ mt: 1 }}
-        >
-          {loading ? "Cadastrando..." : "Cadastrar"}
-        </Button>
+    <>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        width: '100vw',
+        backgroundColor: 'background.default', 
+        }}>
+        <Forms title="Criar Nova Conta">
+        {/* Vinculando a função de envio ao formulário */}
+      
+          <Box 
+            component="form" 
+            onSubmit={handleCadastro}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '80%', alignItems: 'center', margin: '0 auto' }}>
+            <TextField 
+              label="Nome Completo" 
+              variant="outlined" 
+              fullWidth 
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              required
+            />
+            <TextField 
+              label="E-mail" 
+              variant="outlined" 
+              fullWidth 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <TextField 
+              label="Senha" 
+              variant="outlined" 
+              fullWidth 
+              type="password" 
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+            />
+            <TextField 
+              label="Confirmar Senha" 
+              variant="outlined" 
+              fullWidth 
+              type="password" 
+              value={confirmarSenha}
+              onChange={(e) => setConfirmarSenha(e.target.value)}
+              required
+            />
+            {/* Adicionado o type="submit" e o travamento por loading */}
+            <Button 
+              type="submit" 
+              variant="contained" 
+              color="primary" 
+              fullWidth 
+              size="large" 
+              disabled={loading}
+              sx={{ mt: 1 }}
+            >
+              {loading ? "Cadastrando..." : "Cadastrar"}
+            </Button>
 
-        <Typography variant="body2" align="center" sx={{ mt: 1 }}>
-          Já tem uma conta? <Link to="/">Faça Login</Link>
-        </Typography>
+            <Typography variant="body2" align="center" sx={{ mt: 1 }}>
+              Já tem uma conta? <Link to="/">Faça Login</Link>
+            </Typography>
+          </Box>
+        </Forms>
       </Box>
-    </Forms>
+    </>
   );
 }
