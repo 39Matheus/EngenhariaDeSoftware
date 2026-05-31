@@ -1,23 +1,31 @@
 ## Classe UsuarioTests:
+
 Testes gerais para todos os modelos.
-* __test_exercicio_model__ <br>
-  Testa se a instância de __Exercicio__ foi criada corretamente.
-* __test_rotina_model__ <br>
-  Testa se a instância de __Rotina__ foi criada corretamente.
-* __test_rotina_exercicio_model__ <br>
-  Testa se a instância de __RotinaExercicio__ foi criada corretamente.
+
+* **test\_exercicio\_model** <br>
+Testa se a instância de **Exercicio** foi criada corretamente.
+* **test\_rotina\_model** <br>
+Testa se a instância de **Rotina** foi criada corretamente.
+* **test\_rotina\_exercicio\_model** <br>
+Testa se a instância de **RotinaExercicio** foi criada corretamente.
 
 ## Classe RotinaAPITest:
+
 Testes específicos para a classe Rotina.
-* __test_acessar_rotinas_sem_token_retorna_401__ <br>
-  Testa se a API bloqueia o acesso da rota sem o usuário estar logado.
-* __test_acessar_rotinas_com_token_retorna_200__ <br>
-  Testa se a API libera o acesso para o usuário logado.
-* __test_criar_rotina_com_dados_validos__ <br>
-  Testa se a criação de uma rotina é feita com sucesso.
-* __test_criar_rotina_sem_nome_retorna_erro__ <br>
-  Testa se a API só cria uma instância com os dados validados.
-* __test_detalhe_rotina_com_sucesso__ <br>
-  Testa se os detalhes de uma rotina existente são retornados.
-* __test_detalhe_rotina_nao_encontrada__ <br>
-  Testa se a API retorna um erro se a rotina não existe.
+
+* **test\_acessar\_rotinas\_sem\_token\_retorna\_401** <br>
+Testa se a API bloqueia o acesso da rota sem o usuário estar logado.
+* **test\_acessar\_rotinas\_com\_token\_retorna\_200** <br>
+Testa se a API libera o acesso para o usuário logado.
+* **test\_criar\_rotina\_com\_dados\_validos** <br>
+Testa se a criação de uma rotina é feita com sucesso.
+* **test\_criar\_rotina\_sem\_nome\_retorna\_erro** <br>
+Testa se a API só cria uma instância com os dados validados.
+* **test\_detalhe\_rotina\_com\_sucesso** <br>
+Testa se os detalhes de uma rotina existente são retornados.
+* **test\_detalhe\_rotina\_nao\_encontrada** <br>
+Testa se a API retorna um erro se a rotina não existe.
+
+## Print do resultado:
+![Print dos resultados](../assets/testsprint.png)
+
