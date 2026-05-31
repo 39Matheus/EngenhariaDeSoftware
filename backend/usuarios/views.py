@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 from .models import Exercicio, Rotina, RotinaExercicio, Usuario
 from .serializers import (
@@ -12,6 +13,8 @@ from .serializers import (
 class UsuarioList(generics.ListCreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
+
+    permission_classes = [AllowAny]
 
 
 class UsuarioDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -55,6 +58,6 @@ class RotinaExercicioList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         # Pega o ID da rotina diretamente da URL
-        rotina_id = self.kwargs.get("rotina_id")
+        rotina_id = self.kwargs.get("rotina_id")  # type: ignore
         # Salva o novo registro forçando a rotina_id da URL
         serializer.save(rotina_id=rotina_id)
