@@ -83,10 +83,28 @@ class RotinaAPITest(APITestCase):
 
         self.assertEqual(Rotina.objects.count(), 2)
 
-    def test_criar_exercicio_sem_nome_retorna_erro(self):
+    def test_criar_rotina_sem_nome_retorna_erro(self):
         self.client.force_authenticate(user=self.user)
         url = reverse("rotinas_list")
         data = {"usuario": self.user.id, "nome_rotina": ""}  # Nome em branco
         response = self.client.post(url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_detalhe_rotina_com_sucesso(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("rotinas_details", kwargs={"pk": self.rotina.pk})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["id"], self.rotina.id)
+        self.assertEqual(response.data["nome_rotina"], self.rotina.nome_rotina)
+
+    def test_detalhe_rotina_nao_encontrada(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("rotinas_details", kwargs={"pk": 999})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
