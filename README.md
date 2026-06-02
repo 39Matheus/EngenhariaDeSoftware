@@ -48,7 +48,7 @@ Isso criará uma cópia local do repositório em sua máquina.
 ### Baixar como ZIP
 
 1. Acesse a página do repositório no GitHub:
-[https://github.com/mvapedrosa/Eng-de-Software-UFRN](https://github.com/mvapedrosa/Eng-de-Software-UFRN)
+[https://github.com/mvapedrosa/Eng-de-Software-UFRN](https://github.com/39Matheus/Eng-de-Software-UFRN)
 2. Clique no botão **Code** (verde).
 3. Selecione **Download ZIP**.
 4. Extraia o arquivo ZIP para o local desejado em seu computador.
@@ -56,22 +56,29 @@ Isso criará uma cópia local do repositório em sua máquina.
 
 ## Estrutura do Projeto
 
-> *Esta seção pode variar conforme a organização do repositório de cada grupo.*
-
 ```
 Eng-de-Software-UFRN/
 ├── LICENSE
 ├── README.md
-├── <diretório-x>/
-├── <diretório-y>/
-└── <diretório-z>/
+├── UserStories(Prioridades).md
+├── .gitignore
+├── api-doc.md
+├── controle das etapas.csv
+├── modelagem_db.md
+├── backend/
+├── exercitar/
+└── assests/
 ```
 
 - LICENSE: termos da licença do projeto (MIT).
 - README.md: este arquivo de apresentação.
-- X: descrição do diretório X.
-- Y: descrição do diretório Y.
-- Z: descrição do diretório Z.
+- UserStories(Prioridades).md: histórias de usuário.
+- .gitignore: arquivos a serem ignorados pelo git, como ambientes virtuais.
+- api-doc.md: documentação dos _endpoints_ da API.
+- controle das etapas.csv: etapas da implementação do projeto.
+- backend: contém a API.
+- exercitar: contém o frontend.
+- assets: imagens para documentação. 
 
 ## Licença
 
