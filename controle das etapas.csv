@@ -1,0 +1,10 @@
+﻿Nome,tag,prioridade
+"US00: Login ",iniciada,alta
+"US01: Cadastro de Novo Treino  ",Não iniciada,alta
+"US02: Agendamento Semanal (Recorrente) ",Não iniciada,media
+US03: Agendamento Diário (Avulso),Não iniciada,media
+US04: Inclusão de Exercícios,Não iniciada,alta
+US05: Parâmetros de Carga e Volume,Não iniciada,media
+US06: Checklist de Execução,Não iniciada,alta
+US07: Métrica de Progresso em Tempo Real,Não iniciada,baixa
+US08: Histórico de Conclusão,Não iniciada,baixa
