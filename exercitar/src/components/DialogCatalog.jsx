@@ -14,7 +14,8 @@ import {
   ListItemText,
   Checkbox,
   CircularProgress,
-  Box
+  Box,
+  Divider
 } from "@mui/material";
 
 export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
@@ -23,6 +24,7 @@ export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
   const [selectedExercises, setSelectedExercises] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [nomeTreino, setNomeTreino] = React.useState("");
+  const [openDialogconfig, setOpenDialogconfig] = React.useState(false);
 
   React.useEffect(() => {
     if (open) {
@@ -52,6 +54,7 @@ export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
     setSelectedExercises([]);
     setSearch("");
     setNomeTreino("");
+    setOpenDialogconfig(false);
     onClose();
   };
 
@@ -69,7 +72,8 @@ export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
   );
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
+    <>
+    <Dialog open={open} onClose={handleCancel} maxWidth="lg" fullWidth>
       <DialogTitle>Crie seu treino</DialogTitle>
 
       <DialogContent>
@@ -121,14 +125,75 @@ export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
         <Button onClick={handleCancel}>Cancelar</Button>
         <Button 
           variant="contained" 
-          onClick={() => {
-            onCreateWorkout({ nome: nomeTreino, exercicios: selectedExercises });
-            handleCancel(); // Limpa os estados e fecha o modal
-          }}
+          onClick={() => setOpenDialogconfig(true)}
         >
           Continuar
         </Button>
       </DialogActions>
     </Dialog>
+
+    <Dialog open={openDialogconfig} onClose={() => setOpenDialogconfig(false)} maxWidth="sm" fullWidth>
+      <DialogTitle>Configurar Séries e Repetições</DialogTitle>
+      
+      <DialogContent dividers>
+        {/* CORREÇÃO 1: Trocamos draftWorkout?.nome por nomeTreino */}
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>
+          Treino: {nomeTreino || 'Sem nome definido'} 
+        </Typography>
+
+        {/* CORREÇÃO 2: Trocamos exerciciosConfig.map por selectedExercises.map */}
+        {selectedExercises.map((ex, index) => (
+          <Box key={ex.id} sx={{ mb: 3 }}>
+            <Typography variant="body1" sx={{ mb: 1, fontWeight: 'medium' }}>
+              {ex.nome}
+            </Typography>
+            
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="Séries (Ex: 3)"
+                size="small"
+                type="number"
+                fullWidth
+                value={ex.series || ""}
+                onChange={(e) => {
+                  const novosExercicios = [...selectedExercises];
+                  novosExercicios[index].series = e.target.value;
+                  setSelectedExercises(novosExercicios);
+                }}
+              />
+              <TextField
+                label="Repetições (Ex: 12)"
+                size="small"
+                type="number"
+                fullWidth
+                value={ex.repeticoes || ""}
+                onChange={(e) => {
+                  const novosExercicios = [...selectedExercises];
+                  novosExercicios[index].repeticoes = e.target.value;
+                  setSelectedExercises(novosExercicios);
+                }}
+              />
+            </Box>
+            <Divider sx={{ mt: 2 }} />
+          </Box>
+        ))}
+      </DialogContent>
+
+      <DialogActions sx={{ p: 2 }}>
+        <Button onClick={() => setOpenDialogconfig(false)}>Voltar</Button>
+        {/* CORREÇÃO 3: Atualizamos a função do botão de salvar */}
+        <Button 
+          variant="contained" 
+          color="success" 
+          onClick={() => {
+            onCreateWorkout({ nome: nomeTreino, exercicios: selectedExercises });
+            handleCancel(); 
+          }}
+        >
+          Salvar Treino
+        </Button>
+      </DialogActions>
+    </Dialog> 
+    </>
   );
 }

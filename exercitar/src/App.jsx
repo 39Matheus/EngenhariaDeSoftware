@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route,Link } from 'react-router-dom'
 import Login from "./paginas/login"
 import Cadastro from "./paginas/Cadastro"
 import Home from "./paginas/home"
+import PrivateRoute from "./components/PrivateRoute"
 
 
 
@@ -17,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
         </Routes>
       </div>
     </BrowserRouter>
