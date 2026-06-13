@@ -108,3 +108,80 @@ class RotinaAPITest(APITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+Usuario = get_user_model()
+
+
+class VincularAlunoAPITest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # 1. Criamos um Professor
+        cls.professor = Usuario.objects.create_user(
+            username="prof_teste", password="123", is_professor=True
+        )
+
+        # 2. Criamos um segundo Professor (para testar a regra de bloqueio)
+        cls.outro_professor = Usuario.objects.create_user(
+            username="prof_teste_2", password="123", is_professor=True
+        )
+
+        # 3. Criamos dois Alunos comuns
+        cls.aluno = Usuario.objects.create_user(
+            username="aluno_teste", password="123", is_professor=False
+        )
+
+        cls.aluno_intruso = Usuario.objects.create_user(
+            username="aluno_intruso", password="123", is_professor=False
+        )
+
+    def test_professor_pode_vincular_aluno_com_sucesso(self):
+        """Garante que o fluxo feliz funciona perfeitamente"""
+        self.client.force_authenticate(user=self.professor)
+        url = reverse("vincular_aluno")
+
+        data = {"aluno_id": self.aluno.id}
+        response = self.client.post(url, data, format="json")
+
+        # Verifica se retornou 200 OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Atualiza o objeto do aluno com os dados mais recentes do banco de dados
+        self.aluno.refresh_from_db()
+
+        # Verifica se o professor do aluno agora é o professor que fez a requisição
+        self.assertEqual(self.aluno.professor, self.professor)
+
+    def test_aluno_nao_pode_vincular_outro_aluno(self):
+        """Garante a segurança: aluno tentando acessar rota de professor retorna 403"""
+        # Autenticamos como um aluno comum
+        self.client.force_authenticate(user=self.aluno_intruso)
+        url = reverse("vincular_aluno")
+
+        data = {"aluno_id": self.aluno.id}
+        response = self.client.post(url, data, format="json")
+
+        # Verifica se a API bloqueou (Forbidden)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_professor_nao_pode_vincular_outro_professor(self):
+        """Garante que a regra de negócio de não vincular dois professores funciona"""
+        self.client.force_authenticate(user=self.professor)
+        url = reverse("vincular_aluno")
+
+        # Tentando passar o ID de outro professor
+        data = {"aluno_id": self.outro_professor.id}
+        response = self.client.post(url, data, format="json")
+
+        # Verifica se a API recusou (Bad Request)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_vincular_aluno_inexistente_retorna_404(self):
+        """Garante que passar um ID falso não quebra o sistema, apenas retorna Not Found"""
+        self.client.force_authenticate(user=self.professor)
+        url = reverse("vincular_aluno")
+
+        data = {"aluno_id": 9999}  # ID que não existe
+        response = self.client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
