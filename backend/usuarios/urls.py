@@ -10,6 +10,7 @@ from .views import (
     RotinaList,
     UsuarioDetail,
     UsuarioList,
+    VincularAlunoView,
 )
 
 urlpatterns = [
@@ -30,4 +31,7 @@ urlpatterns = [
         name="rotinaexercicio_detail",
     ),
     path("login/", obtain_auth_token, name="api_token_auth"),
+    path(
+        "professor/vincular-aluno", VincularAlunoView.as_view(), name="vincular_aluno"
+    ),
 ]

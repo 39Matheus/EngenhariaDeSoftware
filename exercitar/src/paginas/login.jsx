@@ -43,12 +43,20 @@ export default function Login() {
 
       if (response.ok) {
         const data = await response.json();
+        
+        // +++ ADICIONADO: Vamos espiar o que o Django mandou de volta
+        console.log("Resposta do Login:", data);
 
         localStorage.setItem("token", data.token);
-        localStorage.setItem("usuario_id", data.user_id);
+        
+        // Se no console mostrar apenas "id", você deve mudar a linha abaixo para data.id
+        localStorage.setItem("usuario_id", data.user_id); 
 
         navigate("/home");
-      } else {
+      }else {
+        // +++ ADICIONADO: Exibir mensagem de erro mais específica
+        const erro = await response.json();
+        console.error("Erro no login:", erro);
         alert("E-mail ou senha incorretos.");
       }
     } catch (error) {
@@ -163,9 +171,6 @@ export default function Login() {
                 variant="body2"
                 align="center"
               >
-                <Link to="/home">
-                  Voltar para a página inicial
-                </Link>
               </Typography>
             </Box>
           </Paper>

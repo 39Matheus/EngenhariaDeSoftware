@@ -4,7 +4,11 @@ from django.db import models
 
 class Usuario(AbstractUser):
     # Já faz nome, email e senha
-    pass
+    is_professor = models.BooleanField(default=False)
+
+    professor = models.ForeignKey(
+        "self", on_delete=models.SET_NULL, null=True, blank=True, related_name="alunos"
+    )
 
 
 class Exercicio(models.Model):

@@ -18,47 +18,177 @@ export default function Home() {
 
   const [openCatalog, setOpenCatalog] = React.useState(false);
 
-  // Exemplo de dados que vão vir do seu banco do Django no futuro
-  const [meusCards, setMeusCards] = React.useState([
-    {
-      id: 1,
-      titulo: "Treino de Quadríceps",
-      descricao: "Agachamento, Leg Press, Extensora e Afundo."
-    },
-    {
-      id: 2,
-      titulo: "Treino de Peito",
-      descricao: "Supino reto, Supino inclinado, Crossover e Flexões."
-    }
-  ]);
+  const [meusCards, setMeusCards] = React.useState([]);
 
-  const handleCreateWorkout = (workoutData) => {
+ React.useEffect(() => {
+    const buscarMeusTreinos = async () => {
+      const token = localStorage.getItem("token");
 
-    const novoCard = {
-      id: Date.now(),
-      titulo: workoutData.nome,
-      descricao: workoutData.exercicios
-        .map((ex) => ex.nome)
-        .join(", ")
+      // +++ NOVA TRAVA FRONT-END +++
+      // Se não tiver token no navegador, chuta pro login IMEDIATAMENTE
+      if (!token) {
+        console.warn("Nenhum token encontrado. Redirecionando para o login...");
+        navigate("/");
+        return;
+      }
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/rotinas/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}` 
+          }
+        });
+
+        if (response.status === 401 || response.status === 403) {
+          console.warn("Sem permissão! Voltando pro login...");
+          localStorage.removeItem("token"); 
+          localStorage.removeItem("usuario_id");
+          navigate("/"); 
+          return;
+        }
+
+        if (response.ok) {
+          const data = await response.json();
+          const cardsFormatados = data.map(rotina => ({
+             id: rotina.id,
+             titulo: rotina.nome_rotina,
+             descricao: "" 
+          }));
+          setMeusCards(cardsFormatados);
+        }
+
+      } catch (error) {
+        console.error("Erro ao buscar treinos:", error);
+      }
     };
 
-    setMeusCards((prev) => [
-      ...prev,
-      novoCard
-    ]);
+    buscarMeusTreinos();
+  }, [navigate]);
 
-    setOpenCatalog(false);
+  const handleCreateWorkout = async (workoutData) => {
+    try {
+      const usuarioId = localStorage.getItem("usuario_id");
+
+      // 1. Criar a "casca" da Rotina
+      const rotinaResponse = await fetch('http://127.0.0.1:8000/api/v1/rotinas/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          nome_rotina: workoutData.nome,
+          usuario: parseInt(usuarioId, 10) 
+        }) 
+      });
+
+      if (!rotinaResponse.ok) {
+        const erroDoDjango = await rotinaResponse.json();
+        console.error("O Django rejeitou a criação! Motivo:", erroDoDjango);
+        return; 
+      }
+
+      const rotinaCriada = await rotinaResponse.json();
+      const rotinaId = rotinaCriada.id; // Pegamos o ID devolvido pelo Django
+
+      // 2. Adicionar os Exercícios usando o ID gerado
+      const exerciciosPromises = workoutData.exercicios.map(async (ex) => {
+        const dadosExercicio = {
+          exercicio: ex.id, 
+          series: parseInt(ex.series, 10) || 0, 
+          repeticoes: parseInt(ex.repeticoes, 10) || 0
+        };
+
+        const exResponse = await fetch(`http://127.0.0.1:8000/api/v1/rotinas/${rotinaId}/exercicios/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dadosExercicio)
+        });
+
+        if (!exResponse.ok) {
+          console.error(`Erro ao salvar exercício ${ex.nome}. Status:`, exResponse.status);
+        }
+        
+        return exResponse;
+      });
+
+      await Promise.all(exerciciosPromises);
+
+      // 3. Atualizar o estado visual (os Cards na tela)
+      const novoCard = {
+        id: rotinaId,
+        titulo: rotinaCriada.nome_rotina, 
+        descricao: workoutData.exercicios.map((ex) => ex.nome).join(", ")
+      };
+      setMeusCards((prev) => [...prev, novoCard]);
+      
+      // 4. Fechar o Modal
+      setOpenCatalog(false);
+      console.log("Treino e exercícios criados com sucesso!", novoCard);
+
+    } catch (error) {
+      console.error("Erro de conexão ao tentar criar a rotina e os exercícios:", error);
+    }
   };
 
-  const handleEditar = (id) => {
-    console.log("Editar o card:", id);
-    // Aqui depois você abre um modal ou muda de página
-  };
 
-  const handleDeletar = (id) => {
-    console.log("Deletar o card:", id);
-    // Aqui depois você faz o fetch com DELETE para o Django
-  };
+  const handleDeletar = async (id) => {
+  console.log("Deletar o card:", id);
+  
+  try {
+    // Coloque o seu caminho do Django aqui embaixo:
+    const response = await fetch(`http://127.0.0.1:8000/api/v1/rotinas/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        // 'Authorization': 'Bearer SEU_TOKEN_AQUI', // Descomente se a sua API exigir autenticação
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      console.log("Card deletado com sucesso!");
+      // DICA: Aqui você chama a função que atualiza o estado para tirar o card da tela.
+      // Exemplo: setCards(cards.filter(card => card.id !== id));
+    } else {
+      console.error("Erro ao deletar o card no servidor. Status:", response.status);
+    }
+  } catch (error) {
+    console.error("Erro de conexão ao tentar deletar:", error);
+  }
+};
+  // Adicionei o parâmetro "dadosAtualizados", que seria o objeto com os novos valores do form/modal
+const handleEditar = async (id, dadosAtualizados) => {
+  console.log("Salvando edição do card:", id);
+
+  try {
+    // Coloque o seu caminho do Django aqui embaixo:
+    const response = await fetch(`http://127.0.0.1:8000/api/v1/rotinas/${id}/`, {
+      method: 'PUT', // Mude para 'PATCH' se for enviar apenas alguns campos e não o objeto inteiro
+      headers: {
+        // 'Authorization': 'Bearer SEU_TOKEN_AQUI', // Descomente se a sua API exigir autenticação
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dadosAtualizados) // Transforma o objeto JS em JSON para o Django ler
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Card editado com sucesso!", data);
+      
+      // DICA: Aqui você fecha o modal e atualiza a lista (ou o card específico) na tela.
+      // Exemplo: setModalAberto(false);
+      //          buscarCardsNovamente();
+    } else {
+      console.error("Erro ao editar o card no servidor. Status:", response.status);
+    }
+  } catch (error) {
+    console.error("Erro de conexão ao tentar editar:", error);
+  }
+};
+
 
   const handleAdicionar = () => {
   setOpenCatalog(true);
@@ -78,7 +208,8 @@ export default function Home() {
         </Typography>
 
         {/* Grid responsivo para os Cards Quadrados */}
-        <Grid container spacing={3} justifyContent="center">
+        <Grid container spacing={3} sx={{ justifyContent: 'center' }}
+>
           {meusCards.map((card) => (
             <Grid size={{ xs: 6, sm: 6, md: 3 }} key={card.id}>
               <Card 
