@@ -1,3 +1,4 @@
+//home.jsx
 import * as React from 'react';
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button, Card, CardContent, CardActions, IconButton, Fab } from '@mui/material';
@@ -71,11 +72,15 @@ export default function Home() {
     try {
       const usuarioId = localStorage.getItem("usuario_id");
 
+      const token = localStorage.getItem("token");
+      console.log("TESTE 1 - ID puro do navegador:", usuarioId);
+      console.log("TESTE 2 - ID convertido para o Django:", parseInt(usuarioId, 10));
       // 1. Criar a "casca" da Rotina
       const rotinaResponse = await fetch('http://127.0.0.1:8000/api/v1/rotinas/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
         },
         body: JSON.stringify({ 
           nome_rotina: workoutData.nome,
@@ -90,26 +95,27 @@ export default function Home() {
       }
 
       const rotinaCriada = await rotinaResponse.json();
-      const rotinaId = rotinaCriada.id; // Pegamos o ID devolvido pelo Django
+      const rotinaId = rotinaCriada.id; 
 
       // 2. Adicionar os Exercícios usando o ID gerado
       const exerciciosPromises = workoutData.exercicios.map(async (ex) => {
         const dadosExercicio = {
           exercicio: ex.id, 
-          series: parseInt(ex.series, 10) || 0, 
+          series: parseInt(ex.serie, 10) || 0, 
           repeticoes: parseInt(ex.repeticoes, 10) || 0
         };
 
         const exResponse = await fetch(`http://127.0.0.1:8000/api/v1/rotinas/${rotinaId}/exercicios/`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
           },
           body: JSON.stringify(dadosExercicio)
         });
-
         if (!exResponse.ok) {
-          console.error(`Erro ao salvar exercício ${ex.nome}. Status:`, exResponse.status);
+          const erroExercicio = await exResponse.json(); // Pega o motivo do erro
+          console.error(`O Django rejeitou o exercício ${ex.nome}! Motivo:`, erroExercicio);
         }
         
         return exResponse;
@@ -127,7 +133,8 @@ export default function Home() {
       
       // 4. Fechar o Modal
       setOpenCatalog(false);
-      console.log("Treino e exercícios criados com sucesso!", novoCard);
+      alert("oiii");
+      alert("Treino e exercícios criados com sucesso!", novoCard);
 
     } catch (error) {
       console.error("Erro de conexão ao tentar criar a rotina e os exercícios:", error);
@@ -144,14 +151,14 @@ export default function Home() {
       method: 'DELETE',
       headers: {
         // 'Authorization': 'Bearer SEU_TOKEN_AQUI', // Descomente se a sua API exigir autenticação
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`
       }
     });
 
     if (response.ok) {
       console.log("Card deletado com sucesso!");
-      // DICA: Aqui você chama a função que atualiza o estado para tirar o card da tela.
-      // Exemplo: setCards(cards.filter(card => card.id !== id));
+      setMeusCards((prevCards) => prevCards.filter((card) => card.id !== id));
     } else {
       console.error("Erro ao deletar o card no servidor. Status:", response.status);
     }
@@ -169,7 +176,8 @@ const handleEditar = async (id, dadosAtualizados) => {
       method: 'PUT', // Mude para 'PATCH' se for enviar apenas alguns campos e não o objeto inteiro
       headers: {
         // 'Authorization': 'Bearer SEU_TOKEN_AQUI', // Descomente se a sua API exigir autenticação
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`
       },
       body: JSON.stringify(dadosAtualizados) // Transforma o objeto JS em JSON para o Django ler
     });

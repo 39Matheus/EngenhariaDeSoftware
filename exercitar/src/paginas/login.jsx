@@ -1,3 +1,4 @@
+//Login.jsx
 import {
   TextField,
   Button,
@@ -44,17 +45,14 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         
-        // +++ ADICIONADO: Vamos espiar o que o Django mandou de volta
         console.log("Resposta do Login:", data);
 
         localStorage.setItem("token", data.token);
         
-        // Se no console mostrar apenas "id", você deve mudar a linha abaixo para data.id
         localStorage.setItem("usuario_id", data.user_id); 
 
         navigate("/home");
       }else {
-        // +++ ADICIONADO: Exibir mensagem de erro mais específica
         const erro = await response.json();
         console.error("Erro no login:", erro);
         alert("E-mail ou senha incorretos.");

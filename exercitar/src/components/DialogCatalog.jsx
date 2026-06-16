@@ -31,11 +31,19 @@ export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
       const fetchExercicios = async () => {
         setLoading(true);
         try {
-          // Lembre-se de ajustar a URL para a rota correta da sua API
-          const response = await fetch('http://localhost:8000/api/v1/exercicios/'); 
+          const token = localStorage.getItem("token");
+          
+          const response = await fetch('http://localhost:8000/api/v1/exercicios/', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`
+            }
+          });
           if (response.ok) {
             const data = await response.json();
-            setExercicios(data);
+            const listaExercicios = data.results ? data.results : data;
+            setExercicios(listaExercicios);
           } else {
             console.error("Erro ao buscar exercícios da API");
           }
@@ -67,9 +75,9 @@ export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
     }
   };
 
-  const filteredExercises = exercicios.filter((exercise) =>
-    exercise.nome.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredExercises = Array.isArray(exercicios) 
+    ? exercicios.filter((exercise) => exercise.nome.toLowerCase().includes(search.toLowerCase()))
+    : [];
 
   return (
     <>
