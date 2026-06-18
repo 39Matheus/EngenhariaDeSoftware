@@ -52,9 +52,10 @@ class RotinaExercicioSerializer(serializers.ModelSerializer):
 
 class RotinaSerializer(serializers.ModelSerializer):
     # Relacionamento reverso: traz a lista de exercícios de forma aninhada usando o related_name
-    exercicios_da_rotina = RotinaExercicioSerializer(many=True, read_only=True)
+    exercicios_da_rotina = RotinaExercicioSerializer(many=True,read_only=True)
 
     class Meta:
         model = Rotina
         fields = ["id", "usuario", "nome_rotina", "criado_em", "exercicios_da_rotina"]
-        read_only_fields = ["criado_em"]
+        read_only_fields = ["criado_em", "usuario"]
+    

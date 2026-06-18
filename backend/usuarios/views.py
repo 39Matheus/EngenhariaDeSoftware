@@ -12,8 +12,29 @@ from .serializers import (
     RotinaSerializer,
     UsuarioSerializer,
 )
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 
 
+class CustomLoginView(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        # 1. Valida o usuário e senha igual ao padrão do DRF
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        
+        # 2. Pega ou cria o Token para esse usuário
+        token, created = Token.objects.get_or_create(user=user)
+        
+        # 3. Retorna um dicionário customizado com tudo que o front-end precisa!
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'username': user.username,
+            'is_professor': getattr(user, 'is_professor', False)
+        })
+    
 class UsuarioList(generics.ListCreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
