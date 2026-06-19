@@ -18,72 +18,74 @@ import {
   Divider,
 } from "@mui/material";
 
-//import DialogConfig from "./DialogConfig";
+import DialogConfig from "./DialogConfig";
 
 const TOKEN = localStorage.getItem("token");
 
 // FUNÇÃO PRINCIPAL: DialogCatalog
-// Esta é a função principal do componente. Ela controla as janelas (modais)
-// onde o usuário escolhe os exercícios, dá um nome ao treino e configura
-// as séries e repetições.
+// Esta é a função principal do componente. Ela salva o nome do treino e cria uma nova rotina no backend (Django) para depois abrir o modal de configuração
 
-export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
+export default function DialogCatalog({ open, onClose, onSuccess }) {
   const [openDialogconfig, setOpenDialogconfig] = React.useState(false);
   const [nomeTreino, setNomeTreino] = React.useState("");
   const [rotinaId, setRotinaId] = React.useState(null);
 
-  React.useEffect(() => {
-    if (open) {
-      // FUNÇÃO: fetchRotina
-      // Esta função é responsável por criar uma nova rotina no backend (Django) e
-      // obter o ID dessa rotina recém-criada para depois adicionar os exercícios.
-      const fetchRotina = async () => {
-        try {
-          const response = await fetch(
-            "http://localhost:8000/api/v1/rotinas/",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Token ${TOKEN}`,
-              },
-            },
-          );
-          if (response.ok) {
-            const data = await response.json();
-            const rotina_id = data.id;
-            const rotina_nome = data.nome;
-            setRotinaId(rotina_id);
-          } else {
-            console.error("Erro ao gravar rotina na API");
-          }
-        } catch (error) {
-          console.error("Erro de conexão com o Django:", error);
-        }
-      };
-      fetchRotina();
-    }
-  }, [open]);
-
   // =========================================================================
   // FUNÇÃO: handleCancel
-  // Acionada quando o usuário clica em "Cancelar". Ela esvazia todos os
-  // campos digitados, desmarca os exercícios selecionados e fecha os modais.
+  // Limpa tudo e fecha o modal.
   // =========================================================================
   const handleCancel = () => {
-    // setSelectedExercises([]);
-    //setSearch("");
     setNomeTreino("");
+    setRotinaId(null);
     setOpenDialogconfig(false);
     onClose();
   };
 
+  // =========================================================================
+  // FUNÇÃO: handleContinuar
+  // Pega o token fresquinho, cria a "casca" do treino no Django com o nome,
+  // salva o ID gerado e só então abre a próxima janela.
+  // =========================================================================
+  const handleContinuar = async () => {
+    // Trava de segurança: não deixa criar treino sem nome
+    if (!nomeTreino.trim()) {
+      alert("Por favor, digite um nome para o treino.");
+      return;
+    }
+
+    try {
+      // 1. Pega o token no exato momento do clique!
+      const TOKEN = localStorage.getItem("token");
+
+      // 2. Manda o pacote com o nome do treino pro Django
+      const response = await fetch("http://localhost:8000/api/v1/rotinas/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${TOKEN}`,
+        },
+        body: JSON.stringify({ nome_rotina: nomeTreino }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // 3. Guarda o ID gerado (Ex: 15) e abre o segundo modal
+        setRotinaId(data.id);
+        setOpenDialogconfig(true);
+      } else {
+        console.error("Erro ao gravar rotina na API");
+      }
+    } catch (error) {
+      console.error("Erro de conexão com o Django:", error);
+    }
+  };
+
   return (
     <>
-      <Dialog open={open} onClose={handleCancel} maxWidth="lg" fullWidth>
+      <Dialog open={open} onClose={handleCancel} maxWidth="sm" fullWidth>
         <DialogTitle>Crie seu treino</DialogTitle>
 
-        <DialogContent>
+        <DialogContent dividers>
           <Typography sx={{ mb: 1 }}>Nome do treino</Typography>
           <TextField
             fullWidth
@@ -92,23 +94,25 @@ export default function DialogCatalog({ open, onClose, onCreateWorkout }) {
             value={nomeTreino}
             onChange={(e) => setNomeTreino(e.target.value)}
           />
-
-          <DialogActions>
-            <Button onClick={handleCancel}>Cancelar</Button>
-            <Button
-              variant="contained"
-              onClick={() => setOpenDialogconfig(true)}
-            >
-              Continuar
-            </Button>
-          </DialogActions>
         </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleCancel}>Cancelar</Button>
+          <Button variant="contained" onClick={handleContinuar}>
+            Continuar
+          </Button>
+        </DialogActions>
       </Dialog>
 
       {openDialogconfig && (
         <DialogConfig
           open={openDialogconfig}
-          onClose={() => setOpenDialogconfig(false)}
+          onClose={() => {
+            setOpenDialogconfig(false);
+            handleCancel(); // Limpa e fecha as duas janelas quando terminar
+          }}
+          // Passamos o ID gerado para que o DialogConfig saiba onde jogar os exercícios!
+          rotinaId={rotinaId}
+          onSuccess={onSuccess}
         />
       )}
     </>
