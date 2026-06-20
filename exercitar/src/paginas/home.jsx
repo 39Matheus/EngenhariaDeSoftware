@@ -126,7 +126,7 @@ export default function Home() {
 
         <Grid container spacing={3} sx={{ justifyContent: "center" }}>
           {meusCards.map((card) => (
-            <Grid item xs={12} sm={6} md={4} key={card.id}>
+            <Grid xs={12} sm={6} md={4} key={card.id}>
               <Card
                 elevation={3}
                 sx={{

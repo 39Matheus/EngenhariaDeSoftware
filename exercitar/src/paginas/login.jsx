@@ -6,6 +6,7 @@ import {
   Typography,
   CssBaseline,
   Paper,
+  Card,
 } from "@mui/material";
 
 import Forms from "../components/forms";
@@ -44,12 +45,22 @@ export default function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        
-        console.log("Resposta do Login:", data);
 
-        localStorage.setItem("token", data.token);
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("is_professor", data.is_professor);
+          localStorage.setItem("user_id", data.user_id);
+        }  
         
-        localStorage.setItem("usuario_id", data.user_id); 
+        // ====== AQUI ESTÁ A MÁGICA ======
+        // Verificamos se a API devolveu o tipo de conta como professor
+        if (data.is_professor) {
+          alert("👨‍🏫 Bem-vindo, Professor! Acesso liberado à gestão de treinos.");
+        } else {
+          alert("Bem-vindo, Aluno!");
+        }
+
+        console.log("Resposta do Login:", data);
 
         navigate("/home");
       }else {

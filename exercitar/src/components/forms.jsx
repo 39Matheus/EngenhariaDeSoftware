@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Typography, Paper, Card, CardContent } from '@mui/material';
+import { Box, Typography, Paper, Card, CardContent} from '@mui/material';
 
 export default function Forms({ title, children }) {
   return (
