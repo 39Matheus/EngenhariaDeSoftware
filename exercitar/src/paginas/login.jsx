@@ -28,20 +28,17 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/v1/login/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch("http://localhost:8000/api/v1/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          body: JSON.stringify({
-            username: email,
-            password: senha,
-          }),
-        }
-      );
+        body: JSON.stringify({
+          username: email,
+          password: senha,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -50,20 +47,22 @@ export default function Login() {
           localStorage.setItem("token", data.token);
           localStorage.setItem("is_professor", data.is_professor);
           localStorage.setItem("user_id", data.user_id);
-        }  
-        
-        // ====== AQUI ESTÁ A MÁGICA ======
-        // Verificamos se a API devolveu o tipo de conta como professor
-        if (data.is_professor) {
-          alert("👨‍🏫 Bem-vindo, Professor! Acesso liberado à gestão de treinos.");
-        } else {
-          alert("Bem-vindo, Aluno!");
         }
 
+        // ====== AQUI ESTÁ A MÁGICA ======
         console.log("Resposta do Login:", data);
 
-        navigate("/home");
-      }else {
+        // Verificamos se a API devolveu o tipo de conta como professor e redirecionamos
+        if (data.is_professor) {
+          alert(
+            "👨‍🏫 Bem-vindo, Professor! Acesso liberado à gestão de treinos.",
+          );
+          navigate("/Professor"); // 👉 Coloque aqui a rota da página do professor
+        } else {
+          alert("Bem-vindo, Aluno!");
+          navigate("/home"); // 👉 Rota do aluno
+        }
+      } else {
         const erro = await response.json();
         console.error("Erro no login:", erro);
         alert("E-mail ou senha incorretos.");
@@ -115,12 +114,7 @@ export default function Login() {
               borderRadius: 4,
             }}
           >
-            <Typography
-              variant="h4"
-              align="center"
-              fontWeight="bold"
-              mb={4}
-            >
+            <Typography variant="h4" align="center" fontWeight="bold" mb={4}>
               Entrar
             </Typography>
 
@@ -165,22 +159,11 @@ export default function Login() {
                 {loading ? "Entrando..." : "Entrar"}
               </Button>
 
-              <Typography
-                variant="body2"
-                align="center"
-                sx={{ mt: 2 }}
-              >
-                Não tem uma conta?{" "}
-                <Link to="/cadastro">
-                  Cadastre-se
-                </Link>
+              <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+                Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
               </Typography>
 
-              <Typography
-                variant="body2"
-                align="center"
-              >
-              </Typography>
+              <Typography variant="body2" align="center"></Typography>
             </Box>
           </Paper>
         </Box>
