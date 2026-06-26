@@ -5,7 +5,7 @@ import Login from "./paginas/login"
 import Cadastro from "./paginas/Cadastro"
 import Home from "./paginas/home"
 import PrivateRoute from "./components/PrivateRoute"
-import Professor from "./paginas/professor"
+import Professor from "./paginas/Professor"
 
 
 
