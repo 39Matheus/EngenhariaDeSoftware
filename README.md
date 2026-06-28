@@ -1,11 +1,12 @@
 ## Índice
 
 - [Descrição](#descrição)
-- [Componentes](#componentes)  
+- [Componentes](#componentes)
 - [Sobre o Projeto](#sobre-o-projeto)
-- [Como clonar ou baixar](#como-clonar-ou-baixar)  
-- [Estrutura do Projeto](#estrutura-do-projeto)  
-- [Licença](#licença)  
+- [Como clonar ou baixar](#como-clonar-ou-baixar)
+- [Como instalar](#como-instalar)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Licença](#licença)
 
 ## Sobre o Projeto
 
@@ -53,6 +54,26 @@ https://github.com/39Matheus/EngenhariaDeSoftware
 3. Selecione **Download ZIP**.
 4. Extraia o arquivo ZIP para o local desejado em seu computador.
 
+## Como instalar
+### Backend
+```bash
+cd backend/
+
+# Recomendado
+python -m venv .venv
+source .venv/bin/activate # Linux
+.venv/Scripts/Activate.ps1 # Windows
+
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+### Frontend
+```bash
+cd exercitar/
+npm install
+npm run dev
+```
 
 ## Estrutura do Projeto
 
