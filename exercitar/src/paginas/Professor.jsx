@@ -16,11 +16,11 @@ import {
   DialogActions,
   List,
   ListItem,
-  ListItemButton, // 👈 Novo para deixar clicável
+  ListItemButton, // para deixar clicável
   ListItemText,
   CircularProgress,
   Grid,
-  Collapse // 👈 Novo para o efeito sanfona
+  Collapse // o efeito sanfona
 } from "@mui/material";
 
 // Ícones
@@ -29,8 +29,9 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import ExpandLess from "@mui/icons-material/ExpandLess"; // 👈 Seta pra cima
-import ExpandMore from "@mui/icons-material/ExpandMore"; // 👈 Seta pra baixo
+import ExpandLess from "@mui/icons-material/ExpandLess"; // Seta pra cima
+import ExpandMore from "@mui/icons-material/ExpandMore"; // Seta pra baixo
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 // Componentes
 import AppBarComponent from "../components/AppBar";
@@ -217,6 +218,22 @@ export default function Professor() {
           </Typography>
         )}
       </Container>
+      {/* BOTÃO SAIR DO SISTEMA */}
+        <Box sx={{ textAlign: "center", marginTop: "40px", marginBottom: "80px" }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("alunos_vinculados");
+              navigate("/");
+            }}
+            sx={{ textTransform: "none" }}
+          >
+            Sair do Sistema
+          </Button>
+        </Box>
 
       {/* BOTÃO FLUTUANTE */}
       <Fab
