@@ -83,7 +83,7 @@ export default function Cadastro() {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              width: "80%",
+              width: "100%",
               alignItems: "center",
               margin: "0 auto",
             }}

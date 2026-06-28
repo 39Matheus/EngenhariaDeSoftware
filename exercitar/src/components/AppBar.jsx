@@ -38,7 +38,7 @@ export default function AppBarComponent() {
               textDecoration: 'none',
             }}
           >
-            BEM VINDO AO SEU APP PARA SE EXERCITAR!
+            BEM VINDO AO MeuRITMO!
           </Typography>
         
           <Box sx={{ flexGrow: 0 }}>

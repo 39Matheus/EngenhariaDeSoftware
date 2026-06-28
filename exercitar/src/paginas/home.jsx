@@ -234,7 +234,6 @@ export default function Home() {
 
   return (
     <>
-      <AppBarComponent />
       <Box
         sx={{
           padding: { xs: "2px", md: "4px" },

@@ -137,8 +137,6 @@ export default function Professor() {
 
   return (
     <>
-      <AppBarComponent />
-
       <Container maxWidth="lg" sx={{ mt: 5, mb: 10 }}>
         <Box sx={{ textAlign: "center", mb: 4 }}>
           <Typography variant="h4" sx={{ fontWeight: "bold", mb: 1 }}>
