@@ -115,7 +115,7 @@
               }}
             >
               <Typography variant="h4" align="center" fontWeight="bold" mb={4}>
-                Entrar
+                Entrar no MeuRitmo!
               </Typography>
 
               <Box
