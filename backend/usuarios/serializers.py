@@ -10,7 +10,7 @@ Usuario = get_user_model()
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ["id", "username", "email", "first_name", "password"]
+        fields = ["id", "username", "email", "first_name", "password", "is_professor"]
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
@@ -19,6 +19,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             email=validated_data.get("email", ""),
             first_name=validated_data.get("first_name", ""),
+            is_professor=validated_data.get("is_professor", False),
         )
         usuario.set_password(validated_data["password"])
         usuario.save()
@@ -52,9 +53,10 @@ class RotinaExercicioSerializer(serializers.ModelSerializer):
 
 class RotinaSerializer(serializers.ModelSerializer):
     # Relacionamento reverso: traz a lista de exercícios de forma aninhada usando o related_name
-    exercicios_da_rotina = RotinaExercicioSerializer(many=True, read_only=True)
+    exercicios_da_rotina = RotinaExercicioSerializer(many=True,read_only=True)
 
     class Meta:
         model = Rotina
         fields = ["id", "usuario", "nome_rotina", "criado_em", "exercicios_da_rotina"]
-        read_only_fields = ["criado_em"]
+        read_only_fields = ["criado_em", "usuario"]
+    

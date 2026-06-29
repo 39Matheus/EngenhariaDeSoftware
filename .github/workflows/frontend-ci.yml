@@ -1,0 +1,32 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Baixar o código do repositório
+      uses: actions/checkout@v4
+
+    - name: Configurar o Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm' # Ativa o cache para acelerar os próximos deploys
+        cache-dependency-path: ./exercitar/package-lock.json
+
+    - name: Instalar dependências
+      working-directory: ./exercitar
+      run: npm ci # O 'npm ci' é mais rápido e seguro para ambientes de CI que o 'npm install'
+
+    - name: Validar se o projeto inicializa sem erros
+      working-directory: ./exercitar
+      run: |
+        echo "Iniciando o servidor de desenvolvimento para testes..."
+        timeout 10s npm run dev || [ $? -eq 124 ]

@@ -26,7 +26,7 @@ export default function AppBarComponent() {
                 <Typography
                     variant="h6"
                     noWrap
-                    component="a"
+                    component="p"
                     href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
@@ -38,13 +38,12 @@ export default function AppBarComponent() {
               textDecoration: 'none',
             }}
           >
-            BEM VINDO AO SEU APP PARA SE EXERCITAR!
+            BEM VINDO AO MeuRITMO!
           </Typography>
         
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
