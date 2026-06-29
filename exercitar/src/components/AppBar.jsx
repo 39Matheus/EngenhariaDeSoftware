@@ -2,7 +2,6 @@
 import * as React from 'react';
 import {AppBar,Box,Toolbar,IconButton,Typography,Menu,Container,Avatar,Tooltip,MenuItem} from '@mui/material';
 
-import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -22,7 +21,7 @@ export default function AppBarComponent() {
         <AppBar position="static">
             <Container maxWidth="xl">
             <Toolbar disableGutters sx={{ width: '100%', justifyContent: 'space-between' }}>
-                <DirectionsRunIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                <img src="/logo_semfundo.png" alt="Logo" style={{ height: '40px', marginRight: '8px' }} />
                 <Typography
                     variant="h6"
                     noWrap
