@@ -88,17 +88,16 @@ Eng-de-Software-UFRN/
 ├── modelagem_db.md
 ├── backend/
 ├── exercitar/
+├── docs/
 └── assests/
 ```
 
 - LICENSE: termos da licença do projeto (MIT).
 - README.md: este arquivo de apresentação.
-- UserStories(Prioridades).md: histórias de usuário.
 - .gitignore: arquivos a serem ignorados pelo git, como ambientes virtuais.
-- api-doc.md: documentação dos _endpoints_ da API.
-- controle das etapas.csv: etapas da implementação do projeto.
 - backend: contém a API.
 - exercitar: contém o frontend.
+- docs: contém a documentação do projeto.
 - assets: imagens para documentação. 
 
 ## Licença
