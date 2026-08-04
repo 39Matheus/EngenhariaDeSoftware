@@ -14,10 +14,10 @@
 ***Exercitar***
 
 ### Componentes
-Bárbara Lima Cordeiro da Silva  
-Clara Alves Pinheiro  
-Ênio Antônio Cunha Lizieri do Nascimento  
-Matheus Bezeril Pinto  
+* Bárbara Lima Cordeiro da Silva  
+* Clara Alves Pinheiro  
+* Ênio Antônio Cunha Lizieri do Nascimento  
+* Matheus Bezeril Pinto  
 
 ### Descrição
 Desenvolvido em Django, Next.js, Python, Javascript, HTML, CSS e React, o MVP do site centraliza em duas telas uma de login e outra para a criação e o agendamento de treinos diários ou semanais. 
@@ -81,24 +81,20 @@ npm run dev
 Eng-de-Software-UFRN/
 ├── LICENSE
 ├── README.md
-├── UserStories(Prioridades).md
 ├── .gitignore
-├── api-doc.md
-├── controle das etapas.csv
-├── modelagem_db.md
+├── assets/
 ├── backend/
-├── exercitar/
 ├── docs/
-└── assests/
+└── exercitar/
 ```
 
-- LICENSE: termos da licença do projeto (MIT).
-- README.md: este arquivo de apresentação.
-- .gitignore: arquivos a serem ignorados pelo git, como ambientes virtuais.
-- backend: contém a API.
-- exercitar: contém o frontend.
-- docs: contém a documentação do projeto.
-- assets: imagens para documentação. 
+- __LICENSE__: termos da licença do projeto (MIT).
+- __README.md__: este arquivo de apresentação.
+- __.gitignore__: arquivos a serem ignorados pelo git, como ambientes virtuais.
+- __assets__: imagens para documentação.
+- __backend__: contém a API.
+- __docs__: contém a documentação do projeto.
+- __exercitar__: contém o frontend.
 
 ## Licença
 
